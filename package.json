@@ -1,0 +1,22 @@
+{
+  "name": "piton-entity",
+  "description": "Tools for managing objects that repesent business entities from the piton toolkit",
+  "version": "0.1",
+  "author": "Paul Serby <paul.serby@clock.co.uk>",
+  "contributors": [
+    { "name": "Paul Serby", "email": "paul.serby@clock.co.uk" }
+  ],
+  "dependencies": {
+  },
+  "devDependencies": {
+    "expresso": "0.7.2"
+  },
+  "keywords": ["entity"],
+  "repository": "git://github.com/PabloSerbo/piton-entity",
+  "main": "index",
+  "scripts": {
+    "test": "make test",
+    "prepublish" : "npm prune"
+  },
+  "engines": { "node": ">= 0.4.6 < 0.5.0" }
+}
