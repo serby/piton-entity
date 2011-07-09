@@ -1,12 +1,14 @@
 {
   "name": "piton-entity",
-  "description": "Tools for managing objects that repesent business entities from the piton toolkit",
-  "version": "0.1",
+  "description": "Tools for managing objects that represent business entities from the piton toolkit",
+  "version": "0.0.2",
   "author": "Paul Serby <paul.serby@clock.co.uk>",
   "contributors": [
     { "name": "Paul Serby", "email": "paul.serby@clock.co.uk" }
   ],
   "dependencies": {
+		"piton-validity": ">= 0.0.1 < 0.1.0",
+		"piton-string-utils": ">= 0.0.1 < 0.1.0"
   },
   "devDependencies": {
     "expresso": "0.7.2"

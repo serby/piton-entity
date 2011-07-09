@@ -1,6 +1,5 @@
-# piton-validity - Validation framework
-
-An extendible validation framework for validating the properties of an object. Also contains a number of standard validators.
+# piton-entity - Common functions to work with data entities
+Tools for managing objects that represent business entities
 
 ## Installation
 
