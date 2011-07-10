@@ -34,7 +34,7 @@ module.exports = {
 		var entityDefinition = new EntityDefinition();
 		assert.eql({}, entityDefinition.makeDefault());
 	},
-	'makeDefault returns correct obejct': function() {
+	'makeDefault returns correct object': function() {
 		var entityDefinition = createTestEntityDefinition();
 		assert.eql({
 			name: null,
@@ -49,6 +49,14 @@ module.exports = {
 			age: null,
 			active: true
 		}, entityDefinition.makeDefault({ name: 'Paul' }));
+	},
+	'makeDefault extends strips out extra properties': function() {
+		var entityDefinition = createTestEntityDefinition();
+		assert.eql({
+			name: 'Paul',
+			age: null,
+			active: true
+		}, entityDefinition.makeDefault({ name: 'Paul', extra: 'This should not be here'}));
 	},
 	'stripUnknownProperties strips out extra properties': function() {
 		var entityDefinition = createTestEntityDefinition();
