@@ -9,4 +9,9 @@ test:
 test-cov:
 	@TESTFLAGS=--cov $(MAKE) test
 
+npm-publish:
+	@git tag $(VERSION)
+	@git push --tags
+	@npm publish
+
 .PHONY: test test-cov
