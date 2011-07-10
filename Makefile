@@ -14,4 +14,4 @@ npm-publish:
 	@git push --tags
 	@npm publish
 
-.PHONY: test test-cov
+.PHONY: test test-cov npm-publish
