@@ -14,4 +14,9 @@ npm-publish:
 	@git push --tags
 	@npm publish
 
-.PHONY: test test-cov npm-publish
+jshint:
+	@jshint lib
+	@jshint test
+	@jshint *.js
+
+.PHONY: test test-cov npm-publish jshint
