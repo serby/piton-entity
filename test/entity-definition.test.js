@@ -1,7 +1,9 @@
 var
 	EntityDefinition = require('../../piton-entity').EntityDefinition,
-	assert = require('assert');
-
+	assert = require('assert'),
+	validity = require('piton-validity'),
+	validation = validity.validation,
+	PropertyValidator = validity.PropertyValidator;
 
 function createTestEntityDefinition() {
 	var entityDefinition = new EntityDefinition();
@@ -21,6 +23,7 @@ function createTestEntityDefinition() {
 	return entityDefinition;
 }
 
+// Casting
 var assertions = {
 	integer: [
 		382, 382,
@@ -58,16 +61,16 @@ module.exports = {
 			active: null,
 			phoneNumber: null
 		}, entityDefinition.makeBlank());
-	},
-	'makeBlank without a customer schema creates a empty object': function() {
+	}
+	, 'makeBlank without a customer schema creates a empty object': function() {
 		var entityDefinition = new EntityDefinition();
 		assert.eql({}, entityDefinition.makeBlank());
-	},
-	'makeDefault without a customer schema creates a empty object': function() {
+	}
+	, 'makeDefault without a customer schema creates a empty object': function() {
 		var entityDefinition = new EntityDefinition();
 		assert.eql({}, entityDefinition.makeDefault());
-	},
-	'makeDefault returns correct object': function() {
+	}
+	, 'makeDefault returns correct object': function() {
 		var entityDefinition = createTestEntityDefinition();
 		assert.eql({
 			name: null,
@@ -75,8 +78,8 @@ module.exports = {
 			active: true,
 			phoneNumber: null
 		}, entityDefinition.makeDefault());
-	},
-	'makeDefault extends passed object correctly': function() {
+	}
+	, 'makeDefault extends passed object correctly': function() {
 		var entityDefinition = createTestEntityDefinition();
 		assert.eql({
 			name: 'Paul',
@@ -84,8 +87,8 @@ module.exports = {
 			active: true,
 			phoneNumber: null
 		}, entityDefinition.makeDefault({ name: 'Paul' }));
-	},
-	'makeDefault extends strips out extra properties': function() {
+	}
+	, 'makeDefault extends strips out extra properties': function() {
 		var entityDefinition = createTestEntityDefinition();
 		assert.eql({
 			name: 'Paul',
@@ -93,14 +96,14 @@ module.exports = {
 			active: true,
 			phoneNumber: null
 		}, entityDefinition.makeDefault({ name: 'Paul', extra: 'This should not be here'}));
-	},
-	'stripUnknownProperties strips out extra properties': function() {
+	}
+	, 'stripUnknownProperties strips out extra properties': function() {
 		var entityDefinition = createTestEntityDefinition();
 		assert.eql({
 			name: 'Paul'
 		}, entityDefinition.stripUnknownProperties({ name: 'Paul', extra: 'This should not be here' }));
-	},
-	'cast converts types correctly': function() {
+	}
+	, 'cast converts types correctly': function() {
 		var entityDefinition = createTestEntityDefinition();
 
 		Object.keys(assertions).forEach(function(type) {
@@ -117,8 +120,8 @@ module.exports = {
 		assert.throws(function() {
 			entityDefinition.cast(undefined);
 		});
-	},
-	'castProperties converts integer types of properties correctly': function() {
+	}
+	, 'castProperties converts integer types of properties correctly': function() {
 		var entityDefinition = createTestEntityDefinition();
 		var type = 'integer';
 		for(var i = 0; i < assertions[type].length; i += 2) {
@@ -126,8 +129,8 @@ module.exports = {
 				age: assertions[type][i]
 			}, entityDefinition.castProperties({ age: assertions[type][i + 1] }));
 		}
-	},
-	'castProperties converts boolean types of properties correctly': function() {
+	}
+	, 'castProperties converts boolean types of properties correctly': function() {
 		var entityDefinition = createTestEntityDefinition();
 		var type = 'boolean';
 		// Even = expected, odd = supplied
@@ -136,12 +139,33 @@ module.exports = {
 				active: assertions[type][i]
 			}, entityDefinition.castProperties({ active: assertions[type][i + 1] }));
 		}
-	},
-
-	'castProperties does not effect untyped properties': function() {
+	}
+	, 'castProperties does not effect untyped properties': function() {
 		var entityDefinition = createTestEntityDefinition();
 		assert.eql({
 			phoneNumber: '555-0923'
 		}, entityDefinition.castProperties({ phoneNumber: '555-0923' }));
+	}
+	, 'validate does not error on schemas without validation': function() {
+		var entityDefinition = createTestEntityDefinition();
+		assert.eql(entityDefinition.validate(entityDefinition.makeDefault({ name: 'Paul' })), {});
+	}
+	, 'validate returns error for missing property': function() {
+		var entityDefinition = createTestEntityDefinition();
+
+		entityDefinition.schema.name.validators = {
+			all: [validation.required]
+		};
+
+		assert.ok(entityDefinition.validate(entityDefinition.makeDefault({ name: '' }), 'all').name);
+	}
+	, 'validate uses the [all] set by default': function() {
+		var entityDefinition = createTestEntityDefinition();
+
+		entityDefinition.schema.name.validators = {
+			all: [validation.required]
+		};
+
+		assert.ok(entityDefinition.validate(entityDefinition.makeDefault({ name: '' })).name);
 	}
 };

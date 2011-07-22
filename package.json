@@ -1,7 +1,7 @@
 {
   "name": "piton-entity",
   "description": "Tools for managing objects that represent business entities from the piton toolkit",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "Paul Serby <paul.serby@clock.co.uk>",
   "contributors": [
     { "name": "Paul Serby", "email": "paul.serby@clock.co.uk" }
