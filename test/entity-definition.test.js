@@ -30,9 +30,8 @@ var assertions = {
 		245, '245',
 		93, 93.5,
 		831, '831.2',
-		0, null,
-		undefined, undefined,
-		0, ''],
+		null, null,
+		null, ''],
 	boolean: [
 		true, true,
 		true, 1,
@@ -45,11 +44,9 @@ var assertions = {
 		false, 0,
 		false, 'off',
 		false, 'no',
-		false, null,
-		undefined, undefined,
-		false, '']
+		null, null,
+		null, '']
 };
-
 
 
 module.exports = {
@@ -123,11 +120,12 @@ module.exports = {
 	}
 	, 'castProperties converts integer types of properties correctly': function() {
 		var entityDefinition = createTestEntityDefinition();
-		var type = 'integer';
+		var type = 'integer',
+		cast;
 		for(var i = 0; i < assertions[type].length; i += 2) {
 			assert.eql({
 				age: assertions[type][i]
-			}, entityDefinition.castProperties({ age: assertions[type][i + 1] }));
+			},cast = entityDefinition.castProperties({ age: assertions[type][i + 1] }), 	'Failed to cast \'' + type + '\' from \'' + assertions[type][i + 1] + '\' to \'' + assertions[type][i] + '\' instead got \'' + cast.name + '\'');
 		}
 	}
 	, 'castProperties converts boolean types of properties correctly': function() {
@@ -137,7 +135,7 @@ module.exports = {
 		for(var i = 0; i < assertions[type].length; i += 2) {
 			assert.eql({
 				active: assertions[type][i]
-			}, entityDefinition.castProperties({ active: assertions[type][i + 1] }));
+			},cast = entityDefinition.castProperties({ active: assertions[type][i + 1] }), 	'Failed to cast \'' + type + '\' from \'' + assertions[type][i + 1] + '\' to \'' + assertions[type][i] + '\' instead got \'' + cast.active + '\'');
 		}
 	}
 	, 'castProperties does not effect untyped properties': function() {
