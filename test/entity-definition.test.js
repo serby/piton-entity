@@ -124,8 +124,9 @@ module.exports = {
 		cast;
 		for(var i = 0; i < assertions[type].length; i += 2) {
 			assert.eql({
-				age: assertions[type][i]
-			},cast = entityDefinition.castProperties({ age: assertions[type][i + 1] }), 	'Failed to cast \'' + type + '\' from \'' + assertions[type][i + 1] + '\' to \'' + assertions[type][i] + '\' instead got \'' + cast.name + '\'');
+				age: assertions[type][i],
+				active: null
+			},cast = entityDefinition.castProperties({ age: assertions[type][i + 1] }), 'Failed to cast \'' + type + '\' from \'' + assertions[type][i + 1] + '\' to \'' + assertions[type][i] + '\' instead got \'' + cast.age + '\'' + JSON.stringify(cast));
 		}
 	}
 	, 'castProperties converts boolean types of properties correctly': function() {
@@ -134,13 +135,16 @@ module.exports = {
 		// Even = expected, odd = supplied
 		for(var i = 0; i < assertions[type].length; i += 2) {
 			assert.eql({
+				age: null,
 				active: assertions[type][i]
-			},cast = entityDefinition.castProperties({ active: assertions[type][i + 1] }), 	'Failed to cast \'' + type + '\' from \'' + assertions[type][i + 1] + '\' to \'' + assertions[type][i] + '\' instead got \'' + cast.active + '\'');
+			},cast = entityDefinition.castProperties({ active: assertions[type][i + 1] }), 	'Failed to cast \'' + type + '\' from \'' + assertions[type][i + 1] + '\' to \'' + assertions[type][i] + '\' instead got \'' + cast.active + '\'' + JSON.stringify(cast));
 		}
 	}
 	, 'castProperties does not effect untyped properties': function() {
 		var entityDefinition = createTestEntityDefinition();
 		assert.eql({
+			age: null,
+			active: null,
 			phoneNumber: '555-0923'
 		}, entityDefinition.castProperties({ phoneNumber: '555-0923' }));
 	}
