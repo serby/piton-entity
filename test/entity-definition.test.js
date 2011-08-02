@@ -11,7 +11,8 @@ function createTestEntityDefinition() {
 			name: {
 			},
 			age: {
-				type: 'integer'
+				type: 'integer',
+				defaultValue: 0
 			},
 			active: {
 				type: 'boolean',
@@ -67,11 +68,15 @@ module.exports = {
 		var entityDefinition = new EntityDefinition();
 		assert.eql({}, entityDefinition.makeDefault());
 	}
+	, 'makeDefault without a customer schema creates a empty object': function() {
+		var entityDefinition = new EntityDefinition();
+		assert.eql({}, entityDefinition.makeDefault());
+	}
 	, 'makeDefault returns correct object': function() {
 		var entityDefinition = createTestEntityDefinition();
 		assert.eql({
 			name: null,
-			age: null,
+			age: 0,
 			active: true,
 			phoneNumber: null
 		}, entityDefinition.makeDefault());
@@ -80,7 +85,7 @@ module.exports = {
 		var entityDefinition = createTestEntityDefinition();
 		assert.eql({
 			name: 'Paul',
-			age: null,
+			age: 0,
 			active: true,
 			phoneNumber: null
 		}, entityDefinition.makeDefault({ name: 'Paul' }));
@@ -89,7 +94,7 @@ module.exports = {
 		var entityDefinition = createTestEntityDefinition();
 		assert.eql({
 			name: 'Paul',
-			age: null,
+			age: 0,
 			active: true,
 			phoneNumber: null
 		}, entityDefinition.makeDefault({ name: 'Paul', extra: 'This should not be here'}));
