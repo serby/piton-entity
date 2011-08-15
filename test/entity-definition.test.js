@@ -9,6 +9,7 @@ function createTestEntityDefinition() {
 	var entityDefinition = new EntityDefinition();
 		entityDefinition.schema = {
 			name: {
+				tag: ['update']
 			},
 			age: {
 				type: 'integer',
@@ -19,6 +20,7 @@ function createTestEntityDefinition() {
 				defaultValue: true
 			},
 			phoneNumber: {
+				tag: ['update']
 			}
 		};
 	return entityDefinition;
@@ -124,6 +126,16 @@ module.exports = {
 			name: 'Paul'
 		}, entityDefinition.stripUnknownProperties({ name: 'Paul', extra: 'This should not be here' }));
 	},
+	'stripUnknownProperties strips out properties without the given tag': function() {
+		var entityDefinition = createTestEntityDefinition();
+		assert.eql({
+			name: 'Paul'
+		}, entityDefinition.stripUnknownProperties({ name: 'Paul', age: 21 }, 'update'));
+	},
+	'stripUnknownProperties strips out properties without the given tag and returns empty object if tag is not found': function() {
+		var entityDefinition = createTestEntityDefinition();
+		assert.eql({}, entityDefinition.stripUnknownProperties({ name: 'Paul', age: 21 }, 'BADTAG'));
+	},
 	'cast converts types correctly': function() {
 		var entityDefinition = createTestEntityDefinition();
 
@@ -176,7 +188,6 @@ module.exports = {
 		for(var i = 0; i < assertions[type].length; i += 2) {
 			assert.eql({
 				age: assertions[type][i],
-				active: null
 			},cast = entityDefinition.castProperties({ age: assertions[type][i + 1] }), 'Failed to cast \'' + type + '\' from \'' + assertions[type][i + 1] + '\' to \'' + assertions[type][i] + '\' instead got \'' + cast.age + '\'' + JSON.stringify(cast));
 		}
 	},
@@ -186,16 +197,13 @@ module.exports = {
 		// Even = expected, odd = supplied
 		for(var i = 0; i < assertions[type].length; i += 2) {
 			assert.eql({
-				age: null,
 				active: assertions[type][i]
-			},cast = entityDefinition.castProperties({ active: assertions[type][i + 1] }), 	'Failed to cast \'' + type + '\' from \'' + assertions[type][i + 1] + '\' to \'' + assertions[type][i] + '\' instead got \'' + cast.active + '\'' + JSON.stringify(cast));
+			},cast = entityDefinition.castProperties({ active: assertions[type][i + 1] }), 'Failed to cast \'' + type + '\' from \'' + assertions[type][i + 1] + '\' to \'' + assertions[type][i] + '\' instead got \'' + cast.active + '\'' + JSON.stringify(cast));
 		}
 	},
 	'castProperties does not effect untyped properties': function() {
 		var entityDefinition = createTestEntityDefinition();
 		assert.eql({
-			age: null,
-			active: null,
 			phoneNumber: '555-0923'
 		}, entityDefinition.castProperties({ phoneNumber: '555-0923' }));
 	},
