@@ -27,4 +27,6 @@ Icon?
 
 # nodejs npm modules
 /node_modules
-/customer.log
+
+# ZSH Cake plugin
+.cake_task_cache
