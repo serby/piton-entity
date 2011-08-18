@@ -12,7 +12,7 @@ function createTestEntityDefinition() {
 				tag: ['update']
 			},
 			age: {
-				type: 'integer',
+				type: 'number',
 				defaultValue: 0
 			},
 			active: {
@@ -38,11 +38,11 @@ function createArrayEntityDefinition() {
 
 // Casting
 var assertions = {
-	integer: [
+	number: [
 		382, 382,
 		245, '245',
-		93, 93.5,
-		831, '831.2',
+		831.3, 831.3,
+		831.3, '831.3',
 		null, null,
 		null, ''],
 	boolean: [
@@ -181,9 +181,9 @@ module.exports = {
 			entityDefinition.cast(undefined);
 		});
 	},
-	'castProperties converts integer types of properties correctly': function() {
+	'castProperties converts number types of properties correctly': function() {
 		var entityDefinition = createTestEntityDefinition();
-		var type = 'integer',
+		var type = 'number',
 		cast;
 		for(var i = 0; i < assertions[type].length; i += 2) {
 			assert.eql({
