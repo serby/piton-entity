@@ -9,7 +9,8 @@ function createTestEntityDefinition() {
 	var entityDefinition = new EntityDefinition();
 		entityDefinition.schema = {
 			name: {
-				tag: ['update']
+				tag: ['update'],
+				name: 'Full Name'
 			},
 			age: {
 				type: 'number',
@@ -187,7 +188,7 @@ module.exports = {
 		cast;
 		for(var i = 0; i < assertions[type].length; i += 2) {
 			assert.eql({
-				age: assertions[type][i],
+				age: assertions[type][i]
 			},cast = entityDefinition.castProperties({ age: assertions[type][i + 1] }), 'Failed to cast \'' + type + '\' from \'' + assertions[type][i + 1] + '\' to \'' + assertions[type][i] + '\' instead got \'' + cast.age + '\'' + JSON.stringify(cast));
 		}
 	},
@@ -228,5 +229,19 @@ module.exports = {
 		};
 
 		assert.ok(entityDefinition.validate(entityDefinition.makeDefault({ name: '' })).name);
+	},
+	'propertyName returns name when available': function() {
+		var entityDefinition = createTestEntityDefinition();
+		assert.eql(entityDefinition.propertyName('name'), 'Full Name');
+	},
+	'propertyName returns converted name': function() {
+		var entityDefinition = createTestEntityDefinition();
+		assert.eql(entityDefinition.propertyName('age'), 'Age');
+	},
+	'propertyName throws RangeError on unspecified property': function() {
+		var entityDefinition = createTestEntityDefinition();
+		assert.throws(function() {
+			entityDefinition.propertyName('Wobble');
+		}, /RangeError/);
 	}
 };
