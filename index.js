@@ -5,4 +5,4 @@
  *
  * Thursday 23 June 2011
  */
-module.exports.EntityDefinition = require('./lib/entity-definition').EntityDefinition;
+module.exports = require('./lib/entity-definition');

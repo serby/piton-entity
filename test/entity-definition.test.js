@@ -1,13 +1,12 @@
 var
-	EntityDefinition = require('../../piton-entity').EntityDefinition,
+	EntityDefinition = require('../../piton-entity'),
 	assert = require('assert'),
 	validity = require('piton-validity'),
 	validation = validity.validation,
 	PropertyValidator = validity.PropertyValidator;
 
 function createTestEntityDefinition() {
-	var entityDefinition = new EntityDefinition();
-		entityDefinition.schema = {
+	var entityDefinition = EntityDefinition.createEntityDefinition({
 			name: {
 				tag: ['update'],
 				name: 'Full Name'
@@ -23,17 +22,16 @@ function createTestEntityDefinition() {
 			phoneNumber: {
 				tag: ['update']
 			}
-		};
+		});
 	return entityDefinition;
 }
 
 function createArrayEntityDefinition() {
-	var entityDefinition = new EntityDefinition();
-		entityDefinition.schema = {
-			images: {
-				type: 'array'
-			}
-		};
+	var entityDefinition = EntityDefinition.createEntityDefinition({
+		images: {
+			type: 'array'
+		}
+	});
 	return entityDefinition;
 }
 
@@ -73,25 +71,23 @@ module.exports = {
 		}, entityDefinition.makeBlank());
 	},
 	'makeBlank creates empty objects for objects type': function() {
-		var entityDefinition = new EntityDefinition();
-		entityDefinition.schema = {
+		var entityDefinition = EntityDefinition.createEntityDefinition({
 			contacts: {
 				type: 'object'
 			}
-		};
+		});
 		assert.eql({ contacts: {} }, entityDefinition.makeBlank());
 	},
 	'makeBlank creates empty arrays for array type': function() {
-		var entityDefinition = new EntityDefinition();
-		entityDefinition.schema = {
+		var entityDefinition = EntityDefinition.createEntityDefinition({
 			images: {
 				type: 'array'
 			}
-		};
+		});
 		assert.eql({ images: [] }, entityDefinition.makeBlank());
 	},
 	'makeDefault without a customer schema creates a empty object': function() {
-		var entityDefinition = new EntityDefinition();
+		var entityDefinition = EntityDefinition.createEntityDefinition();
 		assert.eql({}, entityDefinition.makeDefault());
 	},
 	'makeDefault returns correct object': function() {
