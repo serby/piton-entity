@@ -1,23 +1,24 @@
 {
 	"name": "piton-entity",
-		"description": "Tools for managing objects that represent business entities from the piton toolkit",
-		"version": "0.0.12",
+		"description": "Tools for managing objects that represent business entities",
+		"version": "0.1.0",
 		"author": "Paul Serby <paul.serby@clock.co.uk>",
 		"contributors": [
 		{ "name": "Paul Serby", "email": "paul.serby@clock.co.uk" }
 	],
 		"dependencies": {
-			"piton-validity": ">= 0.0.1 < 0.1.0",
+			"async": ">= 0.1.9 < 0.2.0",
+			"piton-validity": ">= 0.1.0 < 0.2.0",
 			"piton-string-utils": ">= 0.0.1 < 0.1.0"
 		},
 		"devDependencies": {
 			"expresso": "0.7.2"
 		},
-		"keywords": ["entity"],
+		"keywords": ["entity", "schema", "data"],
 		"repository": "git://github.com/PabloSerbo/piton-entity",
 		"main": "index",
 		"scripts": {
-			"test": "make test",
+			"test": "cake test",
 			"prepublish" : "npm prune"
 		},
 		"engines": { "node": ">= 0.4.6 < 0.5.0" }

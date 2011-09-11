@@ -1,28 +1,26 @@
 var
 	EntityDefinition = require('../../piton-entity'),
 	assert = require('assert'),
-	validity = require('piton-validity'),
-	validation = validity.validation,
-	PropertyValidator = validity.PropertyValidator;
+	validation = require('piton-validity').validation;
 
 function createTestEntityDefinition() {
 	var entityDefinition = EntityDefinition.createEntityDefinition({
-			name: {
-				tag: ['update'],
-				name: 'Full Name'
-			},
-			age: {
-				type: 'number',
-				defaultValue: 0
-			},
-			active: {
-				type: 'boolean',
-				defaultValue: true
-			},
-			phoneNumber: {
-				tag: ['update']
-			}
-		});
+		name: {
+			tag: ['update'],
+			name: 'Full Name'
+		},
+		age: {
+			type: 'number',
+			defaultValue: 0
+		},
+		active: {
+			type: 'boolean',
+			defaultValue: true
+		},
+		phoneNumber: {
+			tag: ['update']
+		}
+	});
 	return entityDefinition;
 }
 
@@ -206,7 +204,9 @@ module.exports = {
 	},
 	'validate does not error on schemas without validation': function() {
 		var entityDefinition = createTestEntityDefinition();
-		assert.eql(entityDefinition.validate(entityDefinition.makeDefault({ name: 'Paul' })), {});
+		entityDefinition.validate(entityDefinition.makeDefault({ name: 'Paul' }), 'all', function(errors) {
+			assert.eql(errors, {});
+		});
 	},
 	'validate returns error for missing property': function() {
 		var entityDefinition = createTestEntityDefinition();
@@ -215,7 +215,9 @@ module.exports = {
 			all: [validation.required]
 		};
 
-		assert.ok(entityDefinition.validate(entityDefinition.makeDefault({ name: '' }), 'all').name);
+		entityDefinition.validate(entityDefinition.makeDefault({ name: '' }), 'all', function(errors) {
+			assert.eql(errors, {"name":"Full Name is required"});
+		});
 	},
 	'validate uses the [all] set by default': function() {
 		var entityDefinition = createTestEntityDefinition();
@@ -224,7 +226,9 @@ module.exports = {
 			all: [validation.required]
 		};
 
-		assert.ok(entityDefinition.validate(entityDefinition.makeDefault({ name: '' })).name);
+		entityDefinition.validate(entityDefinition.makeDefault({ name: '' }), 'all', function(errors) {
+			assert.eql(errors, {"name":"Full Name is required"});
+		});
 	},
 	'propertyName returns name when available': function() {
 		var entityDefinition = createTestEntityDefinition();
