@@ -227,7 +227,22 @@ module.exports = {
 		};
 
 		entityDefinition.validate(entityDefinition.makeDefault({ name: '' }), 'all', function(errors) {
-			assert.eql(errors, {"name":"Full Name is required"});
+			assert.eql(errors, {name: "Full Name is required"});
+		});
+	},
+	'validate returns error for missing property but not for valid property': function() {
+		var entityDefinition = createTestEntityDefinition();
+
+		entityDefinition.schema.name.validators = {
+			all: [validation.required]
+		};
+
+		entityDefinition.schema.age.validators = {
+			all: [validation.required]
+		};
+
+		entityDefinition.validate(entityDefinition.makeDefault({ name: '', age: 33 }), 'all', function(errors) {
+			assert.eql(errors, { name: "Full Name is required" });
 		});
 	},
 	'propertyName returns name when available': function() {
