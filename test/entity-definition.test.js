@@ -245,6 +245,17 @@ module.exports = {
 			assert.eql(errors, { name: "Full Name is required" });
 		});
 	},
+	'validate uses all validators': function() {
+		var entityDefinition = createTestEntityDefinition();
+
+		entityDefinition.schema.name.validators = {
+			all: [validation.required, validation.length(2, 4)]
+		};
+
+		entityDefinition.validate(entityDefinition.makeDefault({ name: 'A' }), 'all', function(errors) {
+			assert.eql(errors, {name: "Full Name must be between 2 and 4 in length"});
+		});
+	},
 	'propertyName returns name when available': function() {
 		var entityDefinition = createTestEntityDefinition();
 		assert.eql(entityDefinition.propertyName('name'), 'Full Name');
