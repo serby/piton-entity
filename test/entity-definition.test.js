@@ -148,7 +148,7 @@ describe('entity-definition', function() {
 
 		it('strips out properties without the given tag and returns empty object if tag is not found', function() {
 			var entityDefinition = createTestEntityDefinition();
-			entityDefinition.stripUnknownProperties({ name: 'Paul', age: 21 }, 'BADTAG').should.eql({})
+			entityDefinition.stripUnknownProperties({ name: 'Paul', age: 21 }, 'BADTAG').should.eql({});
 		});
 	});
 
@@ -214,7 +214,7 @@ describe('entity-definition', function() {
 		it('converts boolean types of properties correctly', function() {
 			var entityDefinition = createTestEntityDefinition();
 			var type = 'boolean',
-				cast;
+			cast;
 
 			// Even = expected, odd = supplied
 			for(var i = 0; i < assertions[type].length; i += 2) {
