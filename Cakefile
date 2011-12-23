@@ -16,9 +16,6 @@ task 'delintAll', 'Runs jshint on all js code', (options) ->
 task 'delint', 'Runs all modified or added files through jshint', (options) ->
 	exec 'jshint `git status --porcelain | sed -e "s/^...//g"` --config support/jshint-config.json', execOutput
 
-task 'test', 'Runs all unit tests', (options) ->
-	exec 'mocha -r should -R List ', execOutput
-
 task 'npm-publish', 'Creates a tag based on version number in package.json then pushes and publishes to NPM', (options) ->
 	version = JSON.parse(fs.readFileSync('./package.json')).version
 	console.log version
