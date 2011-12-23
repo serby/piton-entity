@@ -1,7 +1,7 @@
 {
 	"name": "piton-entity",
 		"description": "Tools for managing objects that represent business entities",
-		"version": "0.2.0",
+		"version": "0.1.3",
 		"author": "Paul Serby <paul.serby@clock.co.uk>",
 		"contributors": [
 			{ "name": "Paul Serby", "email": "paul.serby@clock.co.uk" }
@@ -15,7 +15,7 @@
 			"mocha": "0.3.6"
 		},
 		"keywords": ["entity", "schema", "data"],
-		"repository": "git://github.com/PabloSerbo/piton-entity",
+		"repository": "git://github.com/serby/piton-entity",
 		"main": "index",
 		"scripts": {
 			"test": "cake test",
