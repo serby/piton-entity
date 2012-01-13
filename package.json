@@ -12,10 +12,11 @@
 			"piton-string-utils": ">= 0.0.1 < 0.1.0"
 		},
 		"devDependencies": {
-			"expresso": "0.7.2"
+			"mocha": ">=0.9.0",
+			"should": ">=0.4.2"
 		},
 		"keywords": ["entity", "schema", "data"],
-		"repository": "git://github.com/PabloSerbo/piton-entity",
+		"repository": "git://github.com/serby/piton-entity",
 		"main": "index",
 		"scripts": {
 			"test": "cake test",
