@@ -316,6 +316,71 @@ describe('piton-entity', function() {
 			});
 		});
 
+		it('validates only for tag passed in', function(done) {
+			var entityDefinition = createTestEntityDefinition();
+
+			// Adding required validation to a schema property with a tag
+			entityDefinition.schema.name.validators = {
+				all: [validation.required]
+			};
+
+			// Adding required validation to a schema property without a tag
+			entityDefinition.schema.age.validators = {
+				all: [validation.required]
+			};
+
+			entityDefinition.validate(entityDefinition.makeBlank(), 'all', 'update', function(errors) {
+				errors.should.eql({
+					name: 'Full Name is required'
+				});
+				done();
+			});
+		});
+
+		it('validates by tag and by set', function(done) {
+			var entityDefinition = createTestEntityDefinition();
+
+			entityDefinition.schema.name.validators = {
+				all: [validation.required]
+			};
+
+			entityDefinition.schema.name.tag = ['newTag'];
+
+			entityDefinition.schema.age.validators = {
+				all: [validation.required]
+			};
+
+			entityDefinition.schema.age.tag = ['differentTag'];
+
+			entityDefinition.validate(entityDefinition.makeBlank(), 'all', 'newTag', function(errors) {
+				errors.should.eql({
+					name: 'Full Name is required'
+				});
+				done();
+			});
+
+		});
+
+		it('allows tag and set to be optional parameters', function(done) {
+			var entityDefinition = createTestEntityDefinition();
+
+			entityDefinition.schema.name.validators = {
+				all: [validation.required]
+			};
+
+			entityDefinition.schema.age.validators = {
+				all: [validation.required]
+			};
+
+			entityDefinition.validate(entityDefinition.makeBlank(), function(errors) {
+				errors.should.eql({
+					name: 'Full Name is required',
+					age: 'Age is required'
+				});
+				done();
+			});
+		});
+
 	});
 
 	describe('#propertyName()', function() {
