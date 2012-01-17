@@ -3,7 +3,7 @@ Tools for managing objects that represent business entities
 
 ## Installation
 
-	$ npm install piton-simplate
+	$ npm install piton-entity
 
 ## Usage
 
