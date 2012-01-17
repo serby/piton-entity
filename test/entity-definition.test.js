@@ -59,21 +59,18 @@ var assertions = {
 	]
 };
 
-describe('piton-entity', function() {
+describe('entity-definition', function() {
 
 	describe('#makeBlank()', function() {
 
-		it('returns correct object', function() {
-			var
-				entityDefinition = createTestEntityDefinition();
-
+		it('returns correct empty object with no parameters', function() {
+			var entityDefinition = createTestEntityDefinition();
 			entityDefinition.makeBlank().should.eql({
 				name: null,
 				age: null,
 				active: null,
 				phoneNumber: null
 			});
-
 		});
 
 		it('creates empty objects for objects type', function() {
@@ -82,7 +79,6 @@ describe('piton-entity', function() {
 					type: 'object'
 				}
 			});
-
 			entityDefinition.makeBlank().should.eql({ contacts: {} });
 		});
 
@@ -92,14 +88,13 @@ describe('piton-entity', function() {
 					type: 'array'
 				}
 			});
-
 			entityDefinition.makeBlank().should.eql({ images: [] });
 		});
 	});
 
 	describe('#makeDefault()', function() {
 
-		it('without an entity schema creates a empty object', function() {
+		it('without a customer schema creates a empty object', function() {
 			var entityDefinition = EntityDefinition.createEntityDefinition();
 			entityDefinition.makeDefault().should.eql({});
 		});
@@ -114,7 +109,7 @@ describe('piton-entity', function() {
 			});
 		});
 
-		it('extends passed object correctly', function() {
+		it('extends given object correctly', function() {
 			var entityDefinition = createTestEntityDefinition();
 			entityDefinition.makeDefault({ name: 'Paul' }).should.eql({
 				name: 'Paul',
@@ -124,7 +119,7 @@ describe('piton-entity', function() {
 			});
 		});
 
-		it('strips out extra properties', function() {
+		it('strips out properties not in the schema', function() {
 			var entityDefinition = createTestEntityDefinition();
 			entityDefinition.makeDefault({ name: 'Paul', extra: 'This should not be here'}).should.eql({
 				name: 'Paul',
@@ -136,6 +131,7 @@ describe('piton-entity', function() {
 	});
 
 	describe('#stripUnknownProperties()', function() {
+
 		it('strips out extra properties', function() {
 			var entityDefinition = createTestEntityDefinition();
 			entityDefinition.stripUnknownProperties({ name: 'Paul', extra: 'This should not be here' }).should.eql({
@@ -154,13 +150,13 @@ describe('piton-entity', function() {
 			var entityDefinition = createTestEntityDefinition();
 			entityDefinition.stripUnknownProperties({ name: 'Paul', age: 21 }, 'BADTAG').should.eql({});
 		});
+
 	});
 
 	describe('#cast()', function() {
 
 		it('converts types correctly', function() {
 			var entityDefinition = createTestEntityDefinition();
-
 			Object.keys(assertions).forEach(function(type) {
 				// Even = expected, odd = supplied
 				for(var i = 0; i < assertions[type].length; i += 2) {
@@ -174,12 +170,10 @@ describe('piton-entity', function() {
 
 		it('converts arrays correctly', function() {
 			var entityDefinition = createArrayEntityDefinition();
-
 			[[], null, ''].forEach(function(value) {
 				Array.isArray(entityDefinition.cast('array', value)).should.equal(true);
 				entityDefinition.cast('array', value).should.have.lengthOf(0);
 			});
-
 			[[1], ['a']].forEach(function(value) {
 				Array.isArray(entityDefinition.cast('array', value)).should.equal(true);
 				entityDefinition.cast('array', value).should.have.lengthOf(1);
@@ -188,11 +182,9 @@ describe('piton-entity', function() {
 
 		it('converts object correctly', function() {
 			var entityDefinition = createArrayEntityDefinition();
-
 			[null, ''].forEach(function(value) {
 				Object.keys(entityDefinition.cast('object', value)).should.have.lengthOf(0);
 			});
-
 			[{a:'b'}].forEach(function(value) {
 				Object.keys(entityDefinition.cast('object', value)).should.have.lengthOf(1);
 			});
@@ -200,11 +192,9 @@ describe('piton-entity', function() {
 
 		it('throws exception on unknown type', function() {
 			var entityDefinition = createTestEntityDefinition();
-
 			(function(){
 				entityDefinition.cast(undefined);
 			}).should.throw();
-
 		});
 
 	});
@@ -212,13 +202,12 @@ describe('piton-entity', function() {
 	describe('#castProperties()', function() {
 
 		it('converts number types of properties correctly', function() {
-		var
-			entityDefinition = createTestEntityDefinition(),
-			type = 'number',
-			cast;
+			var
+				entityDefinition = createTestEntityDefinition(),
+				type = 'number',
+				cast;
 
 			for(var i = 0; i < assertions[type].length; i += 2) {
-
 				cast = entityDefinition.castProperties({ age: assertions[type][i + 1] });
 				cast.should.eql({ age: assertions[type][i] },
 					'Failed to cast \'' + type + '\' from \'' + assertions[type][i + 1] + '\' to \'' + assertions[type][i] + '\' instead got \'' + cast.age + '\' ' + JSON.stringify(cast));
@@ -237,12 +226,10 @@ describe('piton-entity', function() {
 					active: assertions[type][i]
 				}, 'Failed to cast \'' + type + '\' from \'' + assertions[type][i + 1] + '\' to \'' + assertions[type][i] + '\' instead got \'' + cast.active + '\'' + JSON.stringify(cast));
 			}
-
 		});
 
 		it('does not effect untyped properties', function() {
 			var entityDefinition = createTestEntityDefinition();
-
 			entityDefinition.castProperties({ phoneNumber: '555-0923' }).should.eql({
 				phoneNumber: '555-0923'
 			});
@@ -383,6 +370,7 @@ describe('piton-entity', function() {
 
 	});
 
+
 	describe('#propertyName()', function() {
 
 		it('returns name when available', function() {
@@ -399,12 +387,11 @@ describe('piton-entity', function() {
 			var
 				entityDefinition = createTestEntityDefinition(),
 				propertyName = 'Wobble';
-
 			(function(){
-				entityDefinition.propertyName('Wobble');
+				entityDefinition.propertyName(propertyName);
 			}).should.throw('No property \'' + propertyName + '\' in schema');
-
 		});
+
 	});
 
 });
