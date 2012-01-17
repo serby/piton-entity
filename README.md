@@ -3,7 +3,7 @@ Tools for managing objects that represent business entities
 
 ## Installation
 
-	$ npm install piton-simplate
+	$ npm install piton-entity
 
 ## Usage
 
@@ -47,7 +47,7 @@ Tools for managing objects that represent business entities
 
 	var stripped = entityDefinition.stripUnknownProperties({
 		name: 'Dom',
-		extra: 'This should be here'
+		extra: 'This should not be here'
 	});
 	// stripped is now equal to:
 	//	{
