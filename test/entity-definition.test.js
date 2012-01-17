@@ -1,7 +1,7 @@
 var
 	EntityDefinition = require('../../piton-entity'),
-	assert = require('assert'),
-	validation = require('piton-validity').validation;
+	validation = require('piton-validity').validation,
+	should = require('should');
 
 function createTestEntityDefinition() {
 	var entityDefinition = EntityDefinition.createEntityDefinition({
@@ -56,7 +56,8 @@ var assertions = {
 		false, 'no',
 		null, null,
 		null, ''
-	]};
+	]
+};
 
 describe('entity-definition', function() {
 
@@ -119,7 +120,6 @@ describe('entity-definition', function() {
 		});
 
 		it('strips out properties not in the schema', function() {
-
 			var entityDefinition = createTestEntityDefinition();
 			entityDefinition.makeDefault({ name: 'Paul', extra: 'This should not be here'}).should.eql({
 				name: 'Paul',
@@ -127,11 +127,11 @@ describe('entity-definition', function() {
 				active: true,
 				phoneNumber: null
 			});
-
 		});
 	});
 
 	describe('#stripUnknownProperties()', function() {
+
 		it('strips out extra properties', function() {
 			var entityDefinition = createTestEntityDefinition();
 			entityDefinition.stripUnknownProperties({ name: 'Paul', extra: 'This should not be here' }).should.eql({
@@ -150,17 +150,19 @@ describe('entity-definition', function() {
 			var entityDefinition = createTestEntityDefinition();
 			entityDefinition.stripUnknownProperties({ name: 'Paul', age: 21 }, 'BADTAG').should.eql({});
 		});
+
 	});
 
 	describe('#cast()', function() {
+
 		it('converts types correctly', function() {
 			var entityDefinition = createTestEntityDefinition();
-
 			Object.keys(assertions).forEach(function(type) {
 				// Even = expected, odd = supplied
 				for(var i = 0; i < assertions[type].length; i += 2) {
 					var cast;
-					assert.deepEqual(assertions[type][i], cast = entityDefinition.cast(type, assertions[type][i + 1]),
+					cast = entityDefinition.cast(type, assertions[type][i + 1]);
+					should.strictEqual(cast, assertions[type][i],
 						'Failed to cast \'' + type + '\' (test ' + i + ') from \'' + assertions[type][i + 1] + '\' to \'' + assertions[type][i] + '\' instead got \'' + cast + '\'');
 				}
 			});
@@ -168,79 +170,84 @@ describe('entity-definition', function() {
 
 		it('converts arrays correctly', function() {
 			var entityDefinition = createArrayEntityDefinition();
-
 			[[], null, ''].forEach(function(value) {
-				assert.ok(Array.isArray(entityDefinition.cast('array', value)));
+				Array.isArray(entityDefinition.cast('array', value)).should.equal(true);
+				entityDefinition.cast('array', value).should.have.lengthOf(0);
 			});
-
 			[[1], ['a']].forEach(function(value) {
-				assert.ok(Array.isArray(entityDefinition.cast('array', value)));
-				entityDefinition.cast('array', value).should.have.length(1);
+				Array.isArray(entityDefinition.cast('array', value)).should.equal(true);
+				entityDefinition.cast('array', value).should.have.lengthOf(1);
 			});
 		});
 
 		it('converts object correctly', function() {
 			var entityDefinition = createArrayEntityDefinition();
-
 			[null, ''].forEach(function(value) {
-				Object.keys(entityDefinition.cast('array', value)).should.have.length(0);
+				Object.keys(entityDefinition.cast('object', value)).should.have.lengthOf(0);
 			});
-
 			[{a:'b'}].forEach(function(value) {
-				Object.keys(entityDefinition.cast('array', value)).should.have.length(1);
+				Object.keys(entityDefinition.cast('object', value)).should.have.lengthOf(1);
 			});
 		});
 
-		it('throws exception on unknown type ', function() {
+		it('throws exception on unknown type', function() {
 			var entityDefinition = createTestEntityDefinition();
-			assert.throws(function() {
+			(function(){
 				entityDefinition.cast(undefined);
-			});
+			}).should.throw();
 		});
+
 	});
 
 	describe('#castProperties()', function() {
+
 		it('converts number types of properties correctly', function() {
-			var entityDefinition = createTestEntityDefinition();
-			var type = 'number',
-			cast;
+			var
+				entityDefinition = createTestEntityDefinition(),
+				type = 'number',
+				cast;
+
 			for(var i = 0; i < assertions[type].length; i += 2) {
-				assert.deepEqual({
-					age: assertions[type][i]
-				},cast = entityDefinition.castProperties({ age: assertions[type][i + 1] }), 'Failed to cast \'' + type + '\' from \'' + assertions[type][i + 1] + '\' to \'' + assertions[type][i] + '\' instead got \'' + cast.age + '\'' + JSON.stringify(cast));
+				cast = entityDefinition.castProperties({ age: assertions[type][i + 1] });
+				cast.should.eql({ age: assertions[type][i] },
+					'Failed to cast \'' + type + '\' from \'' + assertions[type][i + 1] + '\' to \'' + assertions[type][i] + '\' instead got \'' + cast.age + '\' ' + JSON.stringify(cast));
 			}
 		});
 
 		it('converts boolean types of properties correctly', function() {
-			var entityDefinition = createTestEntityDefinition();
-			var type = 'boolean',
+		var
+			entityDefinition = createTestEntityDefinition(),
+			type = 'boolean',
 			cast;
 
-			// Even = expected, odd = supplied
 			for(var i = 0; i < assertions[type].length; i += 2) {
-				assert.deepEqual({
+				cast = entityDefinition.castProperties({ active: assertions[type][i + 1] });
+				cast.should.eql({
 					active: assertions[type][i]
-				},cast = entityDefinition.castProperties({ active: assertions[type][i + 1] }), 'Failed to cast \'' + type + '\' from \'' + assertions[type][i + 1] + '\' to \'' + assertions[type][i] + '\' instead got \'' + cast.active + '\'' + JSON.stringify(cast));
+				}, 'Failed to cast \'' + type + '\' from \'' + assertions[type][i + 1] + '\' to \'' + assertions[type][i] + '\' instead got \'' + cast.active + '\'' + JSON.stringify(cast));
 			}
 		});
 
 		it('does not effect untyped properties', function() {
 			var entityDefinition = createTestEntityDefinition();
-			assert.deepEqual({
+			entityDefinition.castProperties({ phoneNumber: '555-0923' }).should.eql({
 				phoneNumber: '555-0923'
-			}, entityDefinition.castProperties({ phoneNumber: '555-0923' }));
+			});
 		});
+
 	});
 
 	describe('#validate()', function() {
-		it('does not error on schemas without validation', function() {
+
+		it('does not error on schemas without validation', function(done) {
 			var entityDefinition = createTestEntityDefinition();
 			entityDefinition.validate(entityDefinition.makeDefault({ name: 'Paul' }), 'all', function(errors) {
-				assert.deepEqual(errors, {});
+				errors.should.eql({});
+				done();
 			});
 		});
 
-		it('returns error for missing property', function() {
+		it('returns error for missing property', function(done) {
 			var entityDefinition = createTestEntityDefinition();
 
 			entityDefinition.schema.name.validators = {
@@ -248,23 +255,25 @@ describe('entity-definition', function() {
 			};
 
 			entityDefinition.validate(entityDefinition.makeDefault({ name: '' }), 'all', function(errors) {
-				assert.deepEqual(errors, {"name":"Full Name is required"});
+				errors.should.eql({"name":"Full Name is required"});
+				done();
 			});
 		});
 
-		it('uses the [all] set by default', function() {
+		it('uses the [all] set by default', function(done) {
 			var entityDefinition = createTestEntityDefinition();
 
 			entityDefinition.schema.name.validators = {
 				all: [validation.required]
 			};
 
-			entityDefinition.validate(entityDefinition.makeDefault({ name: '' }), 'all', function(errors) {
-				assert.deepEqual(errors, {name: "Full Name is required"});
+			entityDefinition.validate(entityDefinition.makeDefault({ name: '' }), '', function(errors) {
+				errors.should.eql({name: "Full Name is required"});
+				done();
 			});
 		});
 
-		it('returns error for missing property but not for valid property', function() {
+		it('returns error for missing property but not for valid property', function(done) {
 			var entityDefinition = createTestEntityDefinition();
 
 			entityDefinition.schema.name.validators = {
@@ -276,11 +285,12 @@ describe('entity-definition', function() {
 			};
 
 			entityDefinition.validate(entityDefinition.makeDefault({ name: '', age: 33 }), 'all', function(errors) {
-				assert.deepEqual(errors, { name: "Full Name is required" });
+				errors.should.eql({ name: "Full Name is required" });
+				done();
 			});
 		});
 
-		it('uses all validators', function() {
+		it('uses all validators', function(done) {
 			var entityDefinition = createTestEntityDefinition();
 
 			entityDefinition.schema.name.validators = {
@@ -288,28 +298,98 @@ describe('entity-definition', function() {
 			};
 
 			entityDefinition.validate(entityDefinition.makeDefault({ name: 'A' }), 'all', function(errors) {
-				assert.deepEqual(errors, {name: "Full Name must be between 2 and 4 in length"});
+				errors.should.eql({name: "Full Name must be between 2 and 4 in length"});
+				done();
 			});
 		});
+
+		it('validates only for tag passed in', function(done) {
+			var entityDefinition = createTestEntityDefinition();
+
+			// Adding required validation to a schema property with a tag
+			entityDefinition.schema.name.validators = {
+				all: [validation.required]
+			};
+
+			// Adding required validation to a schema property without a tag
+			entityDefinition.schema.age.validators = {
+				all: [validation.required]
+			};
+
+			entityDefinition.validate(entityDefinition.makeBlank(), 'all', 'update', function(errors) {
+				errors.should.eql({
+					name: 'Full Name is required'
+				});
+				done();
+			});
+		});
+
+		it('validates by tag and by set', function(done) {
+			var entityDefinition = createTestEntityDefinition();
+
+			entityDefinition.schema.name.validators = {
+				all: [validation.required]
+			};
+
+			entityDefinition.schema.name.tag = ['newTag'];
+
+			entityDefinition.schema.age.validators = {
+				all: [validation.required]
+			};
+
+			entityDefinition.schema.age.tag = ['differentTag'];
+
+			entityDefinition.validate(entityDefinition.makeBlank(), 'all', 'newTag', function(errors) {
+				errors.should.eql({
+					name: 'Full Name is required'
+				});
+				done();
+			});
+
+		});
+
+		it('allows tag and set to be optional parameters', function(done) {
+			var entityDefinition = createTestEntityDefinition();
+
+			entityDefinition.schema.name.validators = {
+				all: [validation.required]
+			};
+
+			entityDefinition.schema.age.validators = {
+				all: [validation.required]
+			};
+
+			entityDefinition.validate(entityDefinition.makeBlank(), function(errors) {
+				errors.should.eql({
+					name: 'Full Name is required',
+					age: 'Age is required'
+				});
+				done();
+			});
+		});
+
 	});
+
 
 	describe('#propertyName()', function() {
 
 		it('returns name when available', function() {
 			var entityDefinition = createTestEntityDefinition();
-			assert.deepEqual(entityDefinition.propertyName('name'), 'Full Name');
+			entityDefinition.propertyName('name').should.equal('Full Name');
 		});
 
 		it('returns converted name', function() {
 			var entityDefinition = createTestEntityDefinition();
-			assert.deepEqual(entityDefinition.propertyName('age'), 'Age');
+			entityDefinition.propertyName('age').should.eql('Age');
 		});
 
-		it('throws RangeError on unspecified property', function() {
-			var entityDefinition = createTestEntityDefinition();
-			assert.throws(function() {
-				entityDefinition.propertyName('Wobble');
-			}, /RangeError/);
+		it('throws error on unspecified property', function() {
+			var
+				entityDefinition = createTestEntityDefinition(),
+				propertyName = 'Wobble';
+			(function(){
+				entityDefinition.propertyName(propertyName);
+			}).should.throw('No property \'' + propertyName + '\' in schema');
 		});
 
 	});

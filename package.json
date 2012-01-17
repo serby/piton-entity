@@ -4,7 +4,14 @@
 		"version": "0.1.4",
 		"author": "Paul Serby <paul.serby@clock.co.uk>",
 		"contributors": [
-			{ "name": "Paul Serby", "email": "paul.serby@clock.co.uk" }
+			{
+				"name": "Paul Serby",
+				"email": "paul.serby@clock.co.uk"
+			},
+			{
+				"name": "Dom Harrington",
+				"email": "dom.harrington@clock.co.uk"
+			}
 		],
 		"dependencies": {
 			"async": ">= 0.1.9 < 0.2.0",
@@ -12,7 +19,8 @@
 			"piton-string-utils": ">= 0.0.1 < 0.1.0"
 		},
 		"devDependencies": {
-			"mocha": "0.3.6"
+			"mocha": "0.3.6",
+			"should": "0.5.0"
 		},
 		"keywords": ["entity", "schema", "data"],
 		"repository": "git://github.com/serby/piton-entity",
