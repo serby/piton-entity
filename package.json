@@ -1,7 +1,7 @@
 {
 	"name": "piton-entity",
 		"description": "Tools for managing objects that represent business entities",
-		"version": "0.1.4",
+		"version": "0.1.5",
 		"author": "Paul Serby <paul.serby@clock.co.uk>",
 		"contributors": [
 			{
