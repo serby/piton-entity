@@ -1,7 +1,7 @@
 {
 	"name": "piton-entity",
 		"description": "Tools for managing objects that represent business entities",
-		"version": "0.1.6",
+		"version": "0.1.7",
 		"author": "Paul Serby <paul.serby@clock.co.uk>",
 		"contributors": [
 			{
@@ -16,7 +16,7 @@
 		"dependencies": {
 			"async": "~0.1",
 			"piton-validity": "~0.1",
-			"piton-string-utils": "~0.0"
+			"piton-string-utils": "~0.3"
 		},
 		"devDependencies": {
 			"mocha": "~1.4",
