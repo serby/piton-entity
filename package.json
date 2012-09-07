@@ -14,20 +14,20 @@
 			}
 		],
 		"dependencies": {
-			"async": ">= 0.1.9 < 0.2.0",
-			"piton-validity": ">= 0.1.0 < 0.2.0",
-			"piton-string-utils": ">= 0.0.1 < 0.1.0"
+			"async": "~0.1",
+			"piton-validity": "~0.1",
+			"piton-string-utils": "~0.0"
 		},
 		"devDependencies": {
-			"mocha": "0.3.6",
-			"should": "0.5.0"
+			"mocha": "~1.4",
+			"should": "~1.1"
 		},
 		"keywords": ["entity", "schema", "data"],
 		"repository": "git://github.com/serby/piton-entity",
 		"main": "index",
 		"scripts": {
-			"test": "mocha -r should -R List",
+			"test": "./node_modules/.bin/mocha -r should",
 			"prepublish" : "npm prune"
 		},
-		"engines": { "node": ">= 0.4.6 < 0.7.0" }
+		"engines": { "node": ">= 0.4.6" }
 }
