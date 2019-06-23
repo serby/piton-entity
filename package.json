@@ -14,13 +14,13 @@
 			}
 		],
 		"dependencies": {
-			"async": "~0.1",
+			"async": "~3.1.0",
 			"piton-validity": "~0.1",
 			"piton-string-utils": "~0.3"
 		},
 		"devDependencies": {
-			"mocha": "~1.4",
-			"should": "~1.1"
+			"mocha": "~6.1.4",
+			"should": "~13.2.3"
 		},
 		"keywords": ["entity", "schema", "data"],
 		"repository": "git://github.com/serby/piton-entity",
