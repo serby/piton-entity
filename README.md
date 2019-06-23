@@ -1,4 +1,7 @@
 # piton-entity - Common functions to work with data entities
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/serby/piton-entity.svg)](https://greenkeeper.io/)
+
 Tools for managing objects that represent business entities
 
 ## Installation
